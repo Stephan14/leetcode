@@ -22,22 +22,21 @@ public:
         }
 
         ListNode *end = p;
-        ListNode *pPre = p;
+        ListNode *pre = p;
         p = p->next;
         for(int i = m + 1; i <= n; i++)
         {
-            ListNode *pNext = p->next;
-
-            p->next = pPre;
-            pPre = p;
-            p = pNext;
+            ListNode *pnext = p->next;//保存临时变量
+            p->next = pre;
+            pre = p;//****
+            p = pnext;//为下一次设置初值
         }
 
         end->next = p;
         if (q)
-            q->next = pPre;
+            q->next = pre;
         else
-            head = pPre;
+            head = pre;
 
         return head;
     }
