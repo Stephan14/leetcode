@@ -29,15 +29,16 @@ public:
           for( char ch = 'a'; ch <= 'z'; ch++ )
           {
             string temp = currentWord;
+            //判断是否重复
             if( ch == temp[ index ])
               continue;
             temp[ index ] = ch;
             if( temp == endWord )
               return currentLength+1;
+              //判断是否重复
             if( !map.count( temp ) && wordList.count( temp ) )
             {
               que.push( temp );
-              //cout<<temp<<endl;
               map.insert(pair<string, int>(temp, currentLength+1) );
             }
           }
