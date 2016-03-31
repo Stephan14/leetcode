@@ -1,0 +1,225 @@
+适用场景
+输入数据：没什么特征，不像深搜，需要有“递归”的性质。如果是树或者图，概率更大。
+状态转换图：树或者图。
+求解目标：求最短。
+思考的步骤
+1. 是求路径长度，还是路径本身（或动作序列）？
+(a) 如果是求路径长度，则状态里面要存路径长度（或双队列+ 一个全局变量）
+(b) 如果是求路径本身或动作序列
+i. 要用一棵树存储宽搜过程中的路径
+ii. 是否可以预估状态个数的上限？能够预估状态总数，则开一个大数组，用树的双亲
+表示法；如果不能预估状态总数，则要使用一棵通用的树。这一步也是第4 步的必
+要不充分条件。
+2. 如何表示状态？即一个状态需要存储哪些些必要的数据，才能够完整提供如何扩展到下一步
+状态的所有信息。一般记录当前位置或整体局面。
+3. 如何扩展状态？这一步跟第2 步相关。状态里记录的数据不同，扩展方法就不同。对于固定
+不变的数据结构（一般题目直接给出，作为输入数据），如二叉树，图等，扩展方法很简单，直接往下一层走，对于隐式图，要先在第1 步里想清楚状态所带的数据，想清楚了这点，那如何扩展就很简单了。
+
+4. 关于判重，状态是否存在完美哈希方案？即将状态一一映射到整数，互相之间不会冲突。
+(a) 如果不存在，则需要使用通用的哈希表（自己实现或用标准库，例如unordered_set）
+来判重；自己实现哈希表的话，如果能够预估状态个数的上限，则可以开两个数组，head
+和next，表示哈希表，参考第§??节方案2。
+(b) 如果存在，则可以开一个大布尔数组，作为哈希表来判重，且此时可以精确计算出状态
+总数，而不仅仅是预估上限。
+5. 目标状态是否已知？如果题目已经给出了目标状态，可以带来很大便利，这时候可以从起始
+状态出发，正向广搜；也可以从目标状态出发，逆向广搜；也可以同时出发，双向广搜。
+
+代码模板
+广搜需要一个队列，用于一层一层扩展，一个hashset，用于判重，一棵树（只求长度时不需
+要），用于存储整棵树。
+对于队列，可以用queue，也可以把vector 当做队列使用。当求长度时，有两种做法：
+1. 只用一个队列，但在状态结构体state_t 里增加一个整数字段step，表示走到当前状态用
+了多少步，当碰到目标状态，直接输出step 即可。这个方案，可以很方便的变成A* 算法，
+把队列换成优先队列即可。
+2. 用两个队列，current, next，分别表示当前层次和下一层，另设一个全局整数level，表
+示层数（也即路径长度），当碰到目标状态，输出level 即可。这个方案，状态可以少一个字
+段，节省内存。
+对于hashset，如果有完美哈希方案，用布尔数组(bool visited[STATE_MAX] 或vector<bool> visited(STATE_MAX, false)) 来表示；如果没有，可以用STL 里的set 或unordered_set。
+对于树，如果用STL，可以用unordered_map<state_t, state_t > father 表示一颗树，代码非
+常简洁。如果能够预估状态总数的上限（设为STATE_MAX），可以用数组(state_t nodes[STATE_-MAX])，即树的双亲表示法来表示树，效率更高，当然，需要写更多代码。
+
+双队列的写法
+/** 状态 */
+struct state_t {
+    int data1;  /** 状态的数据，可以有多个字段. */
+    int data2;  /** 状态的数据，可以有多个字段. */
+    // dataN;   /** 其他字段 */
+    int action; /** 由父状态移动到本状态的动作，求动作序列时需要. */
+    int count;  /** 所花费的步骤数（也即路径长度-1），求路径长度时需要；
+                    不过，采用双队列时不需要本字段，只需全局设一个整数 */
+    bool operator==(const state_t &other) const {
+        return true;  // 根据具体问题实现
+    }
+};
+
+// 定义hash函数
+
+// 方法1：模板特化，当hash函数只需要状态本身，不需要其他数据时，用这个方法比较简洁
+namespace std {
+template<> struct hash<state_t> {
+    size_t operator()(const state_t & x) const {
+        return 0; // 根据具体问题实现
+    }
+};
+}
+
+// 方法2：函数对象，如果hash函数需要运行时数据，则用这种方法
+class Hasher {
+public:
+    Hasher(int _m) : m(_m) {};
+    size_t operator()(const state_t &s) const {
+        return 0; // 根据具体问题实现
+    }
+private:
+    int m; // 存放外面传入的数据
+};
+
+/**
+ * @brief 反向生成路径.
+ * @param[in] father 树
+ * @param[in] target 目标节点
+ * @return 从起点到target的路径
+ */
+template<typename state_t>
+vector<state_t> gen_path(const unordered_map<state_t, state_t> &father,
+        const state_t &target) {
+    vector<state_t> path;
+    path.push_back(target);
+
+    for (state_t cur = target; father.find(cur) != father.end();
+            cur = father.at(cur))
+        path.push_back(cur);
+
+    reverse(path.begin(), path.end());
+
+    return path;
+}
+
+/**
+ * @brief 广搜.
+ * @param[in] state_t 状态，如整数，字符串，一维数组等
+ * @param[in] start 起点
+ * @param[in] grid 输入数据
+ * @return 从起点到目标状态的一条最短路径
+ */
+template<typename state_t>
+vector<state_t> bfs(const state_t &start, const vector<vector<int>> &grid) {
+    queue<state_t> next, current; // 当前层，下一层
+    unordered_set<state_t> visited; // 判重
+    unordered_map<state_t, state_t> father; // 树
+
+    int level = 0;  // 层次
+    bool found = false; // 是否找到目标
+    state_t target; // 符合条件的目标状态
+
+    // 判断当前状态是否为所求目标
+    auto state_is_target = [&](const state_t &s) {return true; };
+    // 扩展当前状态
+    auto state_extend = [&](const state_t &s) {
+        vector<state_t> result;
+        // ...
+        return result;
+    };
+
+    current.push(start);
+    visited.insert(start);
+    while (!current.empty() && !found) {
+        ++level;
+        while (!current.empty() && !found) {
+            const state_t state = current.front();
+            current.pop();
+            vector<state_t> new_states = state_extend(state);
+            for (auto iter = new_states.cbegin();
+                    iter != new_states.cend() && ! found; ++iter) {
+                const state_t new_state(*iter);
+
+                if (state_is_target(new_state)) {
+                    found = true; //找到了
+                    target = new_state;
+                    father[new_state] = state;
+                    break;
+                }
+
+                next.push(new_state);
+                // visited.insert(new_state); 必须放到 state_extend()里
+                father[new_state] = state;
+            }
+        }
+        swap(next, current); //!!! 交换两个队列
+    }
+
+    if (found) {
+        return gen_path(father, target);
+        //return level + 1;
+    } else {
+        return vector<state_t>();
+        //return 0;
+    }
+}
+
+只用一个队列的写法
+双队列的写法，当求路径长度时，不需要在状态里设置一个count 字段记录路径长度，只需全
+局设置一个整数level，比较节省内存；只用一个队列的写法，当求路径长度时，需要在状态里设
+置一个count 字段，不过，这种写法有一个好处——可以很容易的变为A* 算法，把queue 替换为
+priority_queue 即可。
+// 与模板1相同的部分，不再重复
+// ...
+
+/**
+ * @brief 广搜.
+ * @param[in] state_t 状态，如整数，字符串，一维数组等
+ * @param[in] start 起点
+ * @param[in] grid 输入数据
+ * @return 从起点到目标状态的一条最短路径
+ */
+template<typename state_t>
+vector<state_t> bfs(state_t &start, const vector<vector<int>> &grid) {
+    queue<state_t> q; // 队列
+    unordered_set<state_t> visited; // 判重
+    unordered_map<state_t, state_t> father; // 树
+
+    int level = 0;  // 层次
+    bool found = false; // 是否找到目标
+    state_t target; // 符合条件的目标状态
+
+    // 判断当前状态是否为所求目标
+    auto state_is_target = [&](const state_t &s) {return true; };
+    // 扩展当前状态
+    auto state_extend = [&](const state_t &s) {
+        vector<state_t> result;
+        // ...
+        return result;
+    };
+
+    start.count = 0;
+    q.push(start);
+    visited.insert(start);
+    while (!q.empty() && !found) {
+        const state_t state = q.front();
+        q.pop();
+        vector<state_t> new_states = state_extend(state);
+        for (auto iter = new_states.cbegin();
+                iter != new_states.cend() && ! found; ++iter) {
+            const state_t new_state(*iter);
+
+            if (state_is_target(new_state)) {
+                found = true; //找到了
+                target = new_state;
+                father[new_state] = state;
+                break;
+            }
+
+            q.push(new_state);
+            // visited.insert(new_state); 必须放到 state_extend()里
+            father[new_state] = state;
+        }
+    }
+
+    if (found) {
+        return gen_path(father, target);
+        //return level + 1;
+    } else {
+        return vector<state_t>();
+        //return 0;
+    }
+}
