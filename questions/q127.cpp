@@ -1,3 +1,4 @@
+/*广度优先搜索*/
 #include<iostream>
 #include<string>
 #include<queue>
@@ -11,9 +12,10 @@ public:
     int ladderLength(string beginWord, string endWord, unordered_set<string>& wordList) {
       queue<string> que;
       map<string, int> map;
-
+      //终止条件
       if( beginWord == "" || endWord == "" || wordList.empty() )
         return 0;
+      //收敛条件
       if( beginWord == endWord )
         return 1;
       que.push( beginWord );
@@ -24,6 +26,7 @@ public:
         string currentWord = que.front();
         que.pop();
         int currentLength = map[ currentWord ];
+        //扩展当前状态
         for( int index = 0; index < currentWord.length(); index++ )
         {
           for( char ch = 'a'; ch <= 'z'; ch++ )
@@ -33,9 +36,10 @@ public:
             if( ch == temp[ index ])
               continue;
             temp[ index ] = ch;
+            //收敛条件
             if( temp == endWord )
               return currentLength+1;
-              //判断是否重复
+              //判断是否重复并扩展节点
             if( !map.count( temp ) && wordList.count( temp ) )
             {
               que.push( temp );
