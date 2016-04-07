@@ -20,12 +20,12 @@ public:
            if( column == 0 )
            {
             temp[ column ] = total[ level-1 ][ column ] + triangle[ level ][ column ];
-            cout<<temp[column]<<" ";
+            //cout<<temp[column]<<" ";
           }
            else if( column == (triangle.at(level).size() - 1) )
            {
             temp[ column ] = total[ level-1 ][ column-1 ] + triangle[ level ][ column ];
-            cout<<temp[column]<<" ";
+            //cout<<temp[column]<<" ";
            }
            else
            {
@@ -33,9 +33,9 @@ public:
                 temp[ column ] = total[ level-1 ][ column -1] + triangle[ level ][ column ];
               else
                 temp[ column ] = total[ level-1 ][ column ] + triangle[ level ][ column ];
-                cout<<temp[column]<<" ";
+                //cout<<temp[column]<<" ";
            }
-           cout<<endl;
+           //cout<<endl;
         total.push_back( temp );
       }
 
