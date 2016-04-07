@@ -39,7 +39,7 @@ public:
             //收敛条件
             if( temp == endWord )
               return currentLength+1;
-              //判断是否重复并扩展节点
+            //判断是否重复并扩展节点
             if( !map.count( temp ) && wordList.count( temp ) )
             {
               que.push( temp );
