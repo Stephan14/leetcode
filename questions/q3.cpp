@@ -1,30 +1,22 @@
 #include<iostream>
 #include<string>
-#include<unordered_set>
 
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-      int index, length = 0, max_lenghth;
+      int index, cur_index = -1, max_lenghth = 0;
+      int char_set[256];//保存上次字符出现的位置
+      memset( char_set, -1, sizeof( char_set ) );
 
-      unordered_set<char> visited;
       for( index = 0; index < s.size(); index++ )
       {
-        if( visited.count( s[ index ] ) > 0 )
-        {
-          if( length > max_lenghth )
-            max_lenghth = length;
-          visited.clear();
-          length = 0;
-        }
-        else
-        {
-          visited.insert( s[ index ] );
-          length++;
-        }
+        if( char_set[ s[ index ] ] > cur_index )
+          cur_index = char_set[ s[ index ] ];
+        if( index - cur_index > max_lenghth )
+          max_lenghth = index - cur_index;
+        char_set[ s[ index ] ] = index;
       }
-
-      return length;
+      return max_lenghth;
     }
 };
 
