@@ -21,7 +21,7 @@ public:
            {
             temp[ column ] = total[ level-1 ][ column ] + triangle[ level ][ column ];
             //cout<<temp[column]<<" ";
-          }
+           }
            else if( column == (triangle.at(level).size() - 1) )
            {
             temp[ column ] = total[ level-1 ][ column-1 ] + triangle[ level ][ column ];
@@ -46,6 +46,19 @@ public:
         cout<<*it<<endl;
       }
       return mininumtotal;
+    }
+
+    int minimumTotal(vector<vector<int> > &triangle)
+    {
+      for ( int i = triangle.size() - 2; i >= 0; --i )
+        for ( int j = 0; j < i + 1; ++j )
+        {
+          if( triangle[i+1][j] > triangle[i+1][j+1] )
+            triangle[i][j] += triangle[i+1][j+1];
+          else
+            triangle[i][j] += triangle[i+1][j];
+        }
+        return triangle[0][0];
     }
 
 };
