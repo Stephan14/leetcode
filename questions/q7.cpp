@@ -27,23 +27,31 @@ class Solution
 //        ss >> num;
 //        return num;
 //    }
-    long long int f(long long int x)
-    {
-        long long int resultToReturn = 0;
-        while( x != 0 )
-        {
-            long long int t = x % 10;
-            x = x / 10;
-            resultToReturn = resultToReturn * 10 + t; 
-        }
-        return resultToReturn;
+    int reverse(int x) {
+        const int max = 0x7fffffff;  //int最大值  
+        const int min = 0x80000000;  //int最小值  
+        int sum = 0;   
+
+        while(x != 0)  
+        {  
+            int temp = sum * 10 + x % 10;  
+            x = x / 10;  
+
+            if ( temp / 10 != sum )   //溢出处理  
+            {  
+                sum = 0;
+                break;
+            }  
+            sum = temp;
+        }  
+        return sum;   
     }
 };
 
 int main()
 {
     Solution s;
-    cout << s.f(-123) << endl;
+    cout << s.reverse(1534236469) << endl;
     cout << -1/10 << endl;
     cout << -1%10 << endl;
 //    cout << s.num2str(56) << endl;
