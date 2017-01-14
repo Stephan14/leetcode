@@ -11,39 +11,34 @@ using namespace std;
 class Solution {
     public:
     int myAtoi(string str) {
-       
-        int resultToResult = 0;
-        int flag = 1;
-        bool is = false;
 
-        if(str.size() == 0)
-            return 0;
-
-        for(size_t index = 0; index < str.size(); index++)
+        long long cur=0;
+        int num=0,i=0;
+        int flag1=0,flag2=0;
+        while(str[i]!='\0' && str[i]==' ') i++;//开头空格舍弃
+        if(str[i]=='-') flag1++,i++;
+        else if(str[i]=='+') flag2++,i++;
+        for(; str[i]!='\0'; i++)
         {
-            if(str[index] == '-' && resultToResult == 0 )
+            if(str[i]>='0' && str[i]<='9')
             {
-                flag = -1;
-                is = true;
-                continue;
-            }
-            else if(str[index] == '+' && resultToResult == 0)
-            {
-                is = true;
-                continue;
-            }
-            else if((str[index] == '+' || str[index] == '-') && is )//+-号同时出现
-            {
-                resultToResult = 0;
-                break;
-            }
-            else if((str[index] == ' ' || str[index] == '0') && resultToResult == 0) //前几位为空格或者为0
-                continue;
+                if(flag1==2)
+                {
+                    cur=cur*10-(str[i]-'0');//这里是减法，因为cur符号是负号了
+                    if(cur<INT_MIN) return INT_MIN;
 
-             resultToResult = resultToResult * 10 + str[index] - '0';  
+                }
+                else if(flag1==1) cur=-str[i]+'0',flag1++;//将负数的符号记录到cur里
+                else
+                {
+                    cur=cur*10+(str[i]-'0');
+                    if(cur>INT_MAX) return INT_MAX;
+                }
+            }
+            else break;
         }
-           
-        return flag * resultToResult;
+        num=(int)cur;
+        return num;
     }
 
 };
@@ -51,6 +46,6 @@ class Solution {
 int main()
 {
     Solution s;
-    cout << s.myAtoi("-321");
+    cout << s.myAtoi("  +-0 123");
     return 0;
 }
