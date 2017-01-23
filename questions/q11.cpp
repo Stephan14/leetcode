@@ -23,14 +23,14 @@ class Solution {
             mastWater = max( mastWater,newWater );
             if(height[i] < height[j])
             {
-                int x = 1;
+                int x = i;
                 while(x < j && height[x] <= height[i])
                     x++;
                 i = x;
             }
             else
             {
-                int x = j - 1;
+                int x = j;
                 while(i < x && height[x] <=height[j])
                    x--;
                 j = x;
