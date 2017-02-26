@@ -31,12 +31,12 @@ private:
             return;
         }
         
-        for(int i = begin; i < candidates.size(); i++)
+        for(int i = begin; i < candidates.size() && target >= candidates[i]; i++)
         {
-            if(i == begin || candidates[i] != candidates[i - 1])
+            if(i == begin || candidates[i] != candidates[i - 1]) //去重
             {
                 combination.push_back( candidates[i]);
-                combinationSum(res, combination, candidates, target - candidates[i], i + 1);
+                combinationSum(res, combination, candidates, target - candidates[i], i);
                 combination.pop_back();
             }
         }
