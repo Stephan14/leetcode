@@ -17,7 +17,7 @@ public:
         int left = 0, right = height.size() - 1;
         int maxleft = 0, maxright = 0;
         int result = 0;
-
+        //类似于快排，从两侧向中间移动
         while(left < right)
         {
             if(height[left] <= height[right]) 
