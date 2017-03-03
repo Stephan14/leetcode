@@ -13,27 +13,20 @@ using namespace std;
 class Solution {
 public:
     int jump(vector<int>& nums) {
-    
-        int i = 0;
-        int level = 0;
-        int nextMax = 0;
-        int currentMax = 0;
-        //类似于广度优先遍历的思想
-        if(nums.size() < 2) return 0;
 
-        while(currentMax - i + 1 > 0)
-        {
-            level++;
-            for(; i <= currentMax; i++)
-            {
-                nextMax = max(nextMax, nums[i] + i); 
-                if(nextMax >= nums.size() - 1)
-                    return level;
+        int res = 0, i = 0, cur = 0;
+        int n = nums.size();
+
+        while (cur < n - 1) {
+            int pre = cur;
+            while (i <= pre) {
+                cur = max(cur, i + nums[i]);
+                ++i;
             }
-            currentMax = nextMax;
+            ++res;
+            if (pre == cur) return -1; // May not need this
         }
-        
-        return 0;
+        return res;
     }
 };
 
