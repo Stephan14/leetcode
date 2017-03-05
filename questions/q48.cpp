@@ -13,14 +13,22 @@ using namespace std;
 class Solution {
 public:
     void rotate(vector<vector<int> >& matrix) {
-        //先以行为单位反转数组，然后以对角线为对称轴交换数组元素
-        reverse(matrix.begin(), matrix.end());
-        for(int i = 0; i < matrix.size(); i++)
-            for(int j = i; j < matrix[0].size(); j++)
-            {
-                swap(matrix[i][j], matrix[j][i]);
+        //首先以以反对角线为轴翻转，然后再以x轴中线上下翻转即可得到结果
+        int n = matrix.size();
+
+        for (int i = 0; i < n - 1; ++i) {
+            for (int j = 0; j < n - i; ++j) {
+                swap(matrix[i][j], matrix[n - 1- j][n - 1 - i]);
             }
+        }
+
+        for (int i = 0; i < n / 2; ++i) {
+            for (int j = 0; j < n; ++j) {
+                swap(matrix[i][j], matrix[n - 1 - i][j]);
+            }
+        }
     }
+
 };
 
 
