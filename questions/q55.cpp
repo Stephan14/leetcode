@@ -13,25 +13,15 @@ using namespace std;
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
-        
         if(nums.empty())
             return 1;
-
-        int step = nums[0];
-        int index = 0;
-
-        while(index + step < nums.size() - 1)
-        {
-            index = index + step;
-            step = nums[index];
-            if(step == 0)
-                break;
+        int n = nums.size();
+        int maxIdx = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i > maxIdx || maxIdx >= n - 1) break;
+            maxIdx = max(maxIdx, i + nums[i]);
         }
-
-        if(index + step >= nums.size() - 1)
-            return 1;
-        else 
-            return 0;
+        return maxIdx >= n - 1;    
     }
 };
 
