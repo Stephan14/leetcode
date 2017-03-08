@@ -13,15 +13,20 @@ using namespace std;
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
+        //动态guihua
+        //dp[i]表示走道i位置时剩余的最大步数
+        //那么递推公式为：dp[i] = max(dp[i - 1], A[i - 1]) - 1
         if(nums.empty())
             return 1;
-        int n = nums.size();
-        int maxIdx = 0;
-        for (int i = 0; i < n; ++i) {
-            if (i > maxIdx || maxIdx >= n - 1) break;
-            maxIdx = max(maxIdx, i + nums[i]);
+        vector<int> dp(nums.size(), 0);
+
+        for(int index = 1; index < nums.size(); index++)
+        {
+            dp[index] = max(dp[index - 1], nums[index - 1]) - 1;
+            if(dp[index] < 0)
+                return false;
         }
-        return maxIdx >= n - 1;    
+        return dp[nums.size() - 1] >= 0;
     }
 };
 
