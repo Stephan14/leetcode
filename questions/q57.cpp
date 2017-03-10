@@ -21,35 +21,24 @@ using namespace std;
   };
 class Solution {
 public:
-    static bool comp(const Interval &a, const Interval &b)
-    {
-        return a.start > b.start;
-    }
-
     vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
-        vector<Interval> res;
-        if(intervals.empty())
-        {
-            res.push_back(newInterval);
-            return res;
-        }
-        
-        sort(intervals.begin(), intervals.end(), comp);
-        res.push_back(intervals[0]);
-
-        for(int i = 1; i < intervals.size(); i++) 
-        {
-            if(res.back().end >= newInterval.start) 
-            {
-                res.back().end = max(res.back().end, newInterval.end);
-                res.back().start = min(res.back().start, newInterval.start);
+        vector<Interval> res = intervals;
+        int i = 0, overlap = 0, n = res.size();
+        while (i < n) {
+            if (newInterval.end < res[i].start) break;
+            else if (newInterval.start > res[i].end) {}
+            else {
+                newInterval.start = min(newInterval.start, res[i].start);
+                newInterval.end = max(newInterval.end, res[i].end);
+                ++overlap;
             }
-            else
-                res.push_back(newInterval);
+            ++i;
         }
-
+        if (overlap > 0) res.erase(res.begin() + i - overlap, res.begin() + i);
+        res.insert(res.begin() + i - overlap, newInterval);
         return res;
     }
+
 };
 
 int main()
