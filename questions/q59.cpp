@@ -14,44 +14,33 @@ public:
     vector<vector<int> > generateMatrix(int n) {
        
         vector< vector<int> > result(n, vector<int>(n, 0));
-        int rowBegin = 0;
-        int rowEnd = result.size();
-        int colBegin = 0;
-        int colEnd = result[0].size();
+       
+        int p = n, q = n;
         int value = 1;
-
-        while(rowBegin <= rowEnd && colBegin <= colEnd)
+        
+        for(int i = 0; i < n/2; i++, p -= 2, q -= 2)
         {
-            for(int i = colBegin; i <= colEnd; i++) 
+            for(int j = i; j < i + p; j++) 
             {
-                result[rowBegin][i] = value++;    
-            }
-            rowBegin++;
-
-            for(int i = rowBegin; i <= rowEnd; i++)
-            {
-               result[i][colEnd] = value++;
-            }
-            colEnd--;
-            
-            if(rowBegin <= rowEnd)
-            {
-                for(int i = colEnd; i >= colBegin; i--)
-                {
-                    result[rowEnd][i] = value++;
-                }
-                rowEnd--;
+                result[i][j] = value++; 
             }
 
-            if(colBegin <= colEnd)
+            for(int j = i + 1; j < i + p; j++)
             {
-                for(int i = rowEnd; i >= rowBegin; i-- )
-                {
-                   result[i][colBegin] = value++;
-                }
-                colBegin++;
+               result[j][i+p-1] = value++; 
+            }
+
+            for(int j = i + p - 2; j >= i; j--)
+            {
+                result[i+p-1][j] = value++;
+            }
+
+            for(int j = i + p - 21; j > i; j--)
+            {
+                result[j][i] = value++;
             }
         }
+        if(n % 2 != 0) result[n/2][n/2] = value;
         return result;
     }
 };
