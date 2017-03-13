@@ -13,19 +13,16 @@ using namespace std;
 class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
-        
-        int digit = 1;
-
-        for(int index = digits.size()-1; index >= 0; index--)
-        {
-            int sum = digits[index] + digit;
-
-            digit = sum / 10;
-            digits[index] = sum % 10;
-            if(sum > 9 && index == 0)
-                digits.insert(digits.begin(), digit);
+    
+        int n = digits.size();
+        for (int i = n - 1; i >= 0; --i) {
+            if (digits[i] == 9) digits[i] = 0;
+            else {
+                digits[i] += 1;
+                return digits;
+            }
         }
-
+        if (digits.front() == 0) digits.insert(digits.begin(), 1);
         return digits;
     }
 };
