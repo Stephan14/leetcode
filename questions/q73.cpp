@@ -14,47 +14,56 @@ class Solution {
 public:
     void setZeroes(vector<vector<int> >& matrix) {
         
-        if(matrix.empty() || matrix[0].empty())
-            return;
-
-        bool rowZero = false;
-        bool colZero = false;
-
-        for(int i = 0; i < matrix.size(); i++)
-            if(matrix[i][0] == 0) 
-                colZero = true;
-
-        for(int i = 0; i < matrix[0].size(); i++)
-            if(matrix[0][i] == 0)
-                rowZero = true;
+        int m = matrix.size();
+        if(m < 1) return ;
+        int n = matrix.front().size();
         
-        //根据数组中只更新第一行、第一列的标记
-        for(int i = 1; i < matrix.size(); i++)
-            for(int j = 1; j < matrix[j].size(); j++)
-            {
-                if(matrix[i][j] == 0) 
-                {
-                    matrix[0][j] = 0;
-                    matrix[i][0] = 0;
+        //found first zero
+        int row = -1 ,  col = -1;;
+        for(int i = 0 ; i < m ; i ++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(matrix[i][j] == 0) {
+                    row = i;
+                    col = j;
+                    break;
                 }
             }
-
-        //根据第一行、第一列的值更新数组中值
-        for(int i = 1; i < matrix.size(); i++)
-            for(int j = 1; j < matrix[i].size(); j++)
-            {
-                if(matrix[i][0] == 0 || matrix[0][j] == 0) 
-                    matrix[i][j] = 0;
+            if(row != -1) break;
+        }
+        
+        if(row == -1) return;
+        
+        //row , col to record if has zero
+        for(int i = 0 ; i < m ; i++) {
+            for(int j = 0 ; j < n ; j++) {
+                if(matrix[i][j] == 0) {
+                    matrix[row][j] = 0;
+                    matrix[i][col] = 0;
+                }
             }
-
-        if(colZero)
-            for(int i = 0; i < matrix.size(); i++)
-                matrix[i][0] = 0;
-
-        if(rowZero)
-            for(int i = 0; i < matrix[0].size(); i++)
-                matrix[0][i] = 0;
-
+        }
+        //fill col
+        for(int i = 0 ; i < n ; i++) {
+            if(i != col && matrix[row][i] == 0) {
+                //fill
+                for(int j = 0 ; j < m ; j++) {
+                    matrix[j][i] = 0;
+                }
+            }
+        }
+        //fill row
+        for(int i = 0 ; i < m ; i++) {
+            if(i != row && matrix[i][col] == 0) {
+                //fill
+                for(int j = 0 ; j < n ; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        //col
+        for(int i = 0 ; i < n ; i++) matrix[row][i] = 0;
+        //row
+        for(int i = 0 ; i < m ; i++) matrix[i][col] = 0;
     }
 
     
