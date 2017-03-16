@@ -14,17 +14,21 @@ class Solution {
 public:
     void sortColors(vector<int>& nums) {
         //类似于快速排序，也可以使用计数排序扫描两遍
-        int red = 0;
-        int blue = nums.size() - 1;
+        int red = -1;
+        int blue = nums.size();
+        int i = 0;
 
-        for(int i = 0; i < nums.size(); i++) 
+        while(i < blue)
         {
-            if(nums[i] == 0) 
-                swap(nums[i], nums[red++]);   
-            else if(nums[i] == 2)
-                swap(nums[i--], nums[blue--]);
+            if(nums[i] == 0 && i != ++red) 
+                swap(nums[i], nums[red]);   
+            else if(nums[i] == 2 && i != --blue)
+                swap(nums[i], nums[blue]);
+            else 
+                i++;
         }
     }
+
 };
 
 int main()
