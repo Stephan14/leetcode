@@ -37,7 +37,7 @@ public:
     {
         if(index == word.size())
             return true;
-        if(visited[i][j] || i < 0 || j < 0 || i >= board.size() || j >= board[i].size() || word[index] != board[i][j])
+        if(i < 0 || j < 0 || i >= board.size() || j >= board[i].size() || word[index] != board[i][j] || visited[i][j])
             return false;
         visited[i][j] = true;//递归调用之前的处理
         bool res =  DFSsearch(i - 1, j, index + 1, board, word, visited) ||
