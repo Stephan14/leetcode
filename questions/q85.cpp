@@ -29,6 +29,7 @@ public:
             result = max(result, largestRectangleArea(heights));
         }
     }
+
     int largestRectangleArea(vector<int> &heights){
         
         int result = 0;
@@ -49,6 +50,59 @@ public:
         
         return result;
     }
+    /*
+    * 动态规划解决
+    * int maximalRectangle(vector<vector<char> >& matrix) {
+    *
+    *   int result = 0;
+    *   vector<int> left(matrix.size(), 0);
+    *   vector<int> right(matrix.size(), matrix.size());
+    *   vector<int> heights(matrix.size(), 0);
+    *
+    *   for(int i = 0; i < matrix.size(); i++)
+    *   {
+    *       int cur_left = 0;
+    *       int cut_right = matrix.size();
+    *
+    *       for(int j = 0; j < matrix[i].size(); j++)    
+    *       {
+    *           if(matrix[i][j] == '1')
+    *               heights[j]++;
+    *           else
+    *               heights[j] = 0;
+    *       }
+    *
+    *       for(int j = 0; j < matrix[i].size(); j++)
+    *       {
+    *           if(matrix[i][j] == '1')
+    *               left[j] = max(left[j], cur_left);
+    *           else
+    *           {
+    *               left[j] = 0;
+    *               cur_left = j + 1;
+    *           }
+    *       }
+    *
+    *       for(int j = matrix[i].size() - 1; j >= 0; --j)
+    *       {
+    *           if(matrix[i][j] == '1')
+    *               right[j] = min(right[j], cur_right);
+    *           else
+    *           {
+    *               right[j] = n;
+    *               cur_right = j;
+    *           }
+    *       }
+    *
+    *       for(int j = 0; j < matrix[i].size(); j++)
+    *       {
+    *           result = max(result, heights[j] * (right[j] - left[j]));
+    *       }
+    *   }
+    *   return result;
+    * }
+    *
+    * */
 };
 
 int main()
