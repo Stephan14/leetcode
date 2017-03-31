@@ -14,33 +14,19 @@ class Solution {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
 
-        if(m == 0 && n != 0)
+        int i=m-1;
+        int j=n-1;
+        int k = m+n-1;
+
+        while(i >=0 && j>=0) //两个数组合并，从后往前
         {
-            nums1 = nums2;
-            return;
+            if(nums1[i] > nums2[j])
+                nums1[k--] = nums1[i--];
+            else
+                nums1[k--] = nums2[j--];
         }
-
-        int nums1Index = 0;
-        int nums2Index = 0;
-        int insert_num = 0;
-
-        while(nums1Index < (m + insert_num) && nums2Index < n) //插入时数组长度在变化
-        {
-            if(nums1[nums1Index] > nums2[nums2Index])
-            {
-                nums1.insert(nums1.begin() + nums1Index, nums2[nums2Index]);
-                nums2Index++;
-                insert_num++;
-            }
-            nums1Index++;
-        }
-
-        if(nums2Index < n)
-            nums1.insert(nums1.begin() + m + insert_num, nums2.begin() + nums2Index, nums2.end());
-        if(nums1.size() > (m + n))
-            nums1.erase(nums1.begin() + m + n, nums1.end());
-
-        return;
+        while(j>=0)
+            nums1[k--] = nums2[j--];
     }
 };
 
