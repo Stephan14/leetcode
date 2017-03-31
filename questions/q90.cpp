@@ -23,13 +23,17 @@ public:
     
     void getSubsetsWithDup(vector<int>& nums, int index, vector<int>& oneSet, vector<vector<int> >& allSets)
     {
-        if(index == nums.size())    
-            return;
         allSets.push_back(oneSet);
+        for(int i = 0; i < oneSet.size(); i++)
+        {
+            cout << " " << oneSet[i] << "\t";
+        }
+        cout << endl;
+
         for(int i = index; i < nums.size(); i++)
         {
-            oneSet.push_back(nums[index]);
-            getSubsetsWithDup(nums, index + 1, oneSet, allSets);
+            oneSet.push_back(nums[i]);
+            getSubsetsWithDup(nums, i + 1, oneSet, allSets);
             oneSet.pop_back();
         }
     }
@@ -37,5 +41,13 @@ public:
 
 int main()
 {
+    vector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+
+    Solution s;
+    vector<vector<int> > res = s.subsetsWithDup(v);
+    cout << res.size();
     return 0;
 }
