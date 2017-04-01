@@ -11,30 +11,28 @@
 using namespace std;
 
 class Solution {
-public:
-    vector<vector<int> > subsetsWithDup(vector<int>& nums) {
-        vector<int> aSet;
-        vector<vector<int> > result;
-        
-        getSubsetsWithDup(nums, 0, aSet, result);
-
-        return result;
+    public:
+    vector<vector<int> > subsetsWithDup(vector<int> &nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int> > res;
+        vector<int> vec;
+        subsetsWithDup(res, nums, vec, 0);
+        return res;
     }
-    
-    void getSubsetsWithDup(vector<int>& nums, int index, vector<int>& oneSet, vector<vector<int> >& allSets)
-    {
-        allSets.push_back(oneSet);
-        for(int i = 0; i < oneSet.size(); i++)
-        {
-            cout << " " << oneSet[i] << "\t";
-        }
+    private:
+    void subsetsWithDup(vector<vector<int> > &res, vector<int> &nums, vector<int> &vec, int begin) {
+
+        res.push_back(vec);
+       
+        for(int i = 0; i < vec.size(); i++)
+            cout << " " << vec[i] << " ";
         cout << endl;
 
-        for(int i = index; i < nums.size(); i++)
-        {
-            oneSet.push_back(nums[i]);
-            getSubsetsWithDup(nums, i + 1, oneSet, allSets);
-            oneSet.pop_back();
+        for(int i = begin; i != nums.size(); ++i)
+            if(i == begin || nums[i] != nums[i - 1]) {//排序去重
+                vec.push_back(nums[i]);
+                subsetsWithDup(res, nums, vec, i + 1);
+                vec.pop_back();
         }
     }
 };
@@ -44,7 +42,7 @@ int main()
     vector<int> v;
     v.push_back(1);
     v.push_back(2);
-    v.push_back(3);
+    v.push_back(2);
 
     Solution s;
     vector<vector<int> > res = s.subsetsWithDup(v);
