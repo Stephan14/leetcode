@@ -10,52 +10,49 @@ using namespace std;
 
 class Solution {
 public:
-    void solveSudoku(vector<vector<char> >& board) {
-        if (board.empty() || board.size() != 9 || board[0].size() != 9) return;
+    void solveSudoku(vector<vector<char> > &board) {
         solveSudoku(board, 0, 0);
     }
 
-    bool solveSudoku(vector<vector<char> > &board, int row, int column)
+    bool check(vector<vector<char>> &board, int i, int j, char val)
     {
-        if(row >= board.size())
-            return true;
-        if(column >= board[0].size())
-            return solveSudoku(board, row + 1, 0);
+        int row = i - i%3, column = j - j%3;
 
-        if(board[row][column] == '.')
-        {
-            for(int num = 1; num < 10; num++)
-            {
-                board[row][column] = num + '0';
-                if(isValid(board, row, column))
-                    if(solveSudoku(board, row, column + 1))
-                        return true;
-                board[row][column] = '.';
-            }
-        }
-        else
-            return solveSudoku(board, row, column + 1);
-        return false;
+        for(int x = 0; x < 9; x++) 
+            if(board[x][j] == val) 
+                return false;
+        for(int y = 0; y < 9; y++) 
+            if(board[i][y] == val) 
+                return false;
+        for(int x = 0; x < 3; x++)
+            for(int y = 0; y < 3; y++)
+                if(board[row + x][column + y] == val) 
+                    return false;
+        
+        return true;
     }
 
-    bool isValid(vector<vector<char> > &board, int row, int column)
+    bool solveSudoku(vector<vector<char>> &board, int i, int j)
     {
-        for(int indexRow = 0; indexRow < board.size(); indexRow++)
-            if(indexRow != row && board[indexRow][column] == board[row][column])
-                return false;
+        if(i == 9) 
+            return true;
+        if(j == 9)
+            return solveSudoku(board, i+1, 0);
+        if(board[i][j] != '.') 
+            return solveSudoku(board, i, j+1);
 
-        for(int indexColumn = 0; indexColumn < board[row].size(); indexColumn++)
-            if(indexColumn != column && board[row][indexColumn] == board[row][column])
-                return false;
-
-        for(int indexRow = 3 * row / 3; indexRow < 3 * row / 3 + 3; indexRow++)
-            for(int indexColumn = 3 * column / 3; indexColumn < 3 * column / 3 + 3; indexColumn++)
+        for(char c = '1'; c <= '9'; c++)
+        {
+            if(check(board, i, j, c)) //先检查是否有相同的值，然后修改元素
             {
-                if((row != indexRow || column != indexColumn) && board[row][column] == board[indexRow][indexColumn]) 
-                    return false;
+                board[i][j] = c;
+                if(solveSudoku(board, i, j+1)) 
+                    return true;
+                board[i][j] = '.';
             }
+        }
 
-        return true;
+        return false;
     }
 };
 
