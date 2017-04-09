@@ -11,27 +11,30 @@ using namespace std;
 class Solution {
 public:
     void solveSudoku(vector<vector<char> >& board) {
-       solveSudoku(board, 0, 0); 
+        if (board.empty() || board.size() != 9 || board[0].size() != 9) return;
+        solveSudoku(board, 0, 0);
     }
 
     bool solveSudoku(vector<vector<char> > &board, int row, int column)
     {
-        for(int indexRow = row; indexRow < board.size(); indexRow++)
-            for(int indexColumn = column; indexColumn < board[indexRow].size(); indexColumn++)
-            {
-                if(board[indexRow][indexColumn] == '.')
-                {
-                    for(int num = 1; num < 10; num++)
-                    {
-                        board[indexRow][indexColumn] = num + '0';
-                        if(isValid(board, indexRow, indexColumn))
-                            if(solveSudoku(board, indexRow, indexColumn + 1))
-                                return true;
-                        board[indexRow][indexColumn] = '.';
-                    }
-                }
-            }
+        if(row >= board.size())
+            return true;
+        if(column >= board[0].size())
+            return solveSudoku(board, row + 1, 0);
 
+        if(board[row][column] == '.')
+        {
+            for(int num = 1; num < 10; num++)
+            {
+                board[row][column] = num + '0';
+                if(isValid(board, row, column))
+                    if(solveSudoku(board, row, column + 1))
+                        return true;
+                board[row][column] = '.';
+            }
+        }
+        else
+            return solveSudoku(board, row, column + 1);
         return false;
     }
 
