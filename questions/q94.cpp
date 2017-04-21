@@ -7,6 +7,7 @@
 
 #include<iostream>
 #include<vector>
+#include<stack>
 
 using namespace std;
 
@@ -25,12 +26,13 @@ public:
         vector<int> result;
 
         if(root != NULL)
-            recursiveInorderTraversal(root, result);
+            //recursiveInorderTraversal(root, result);
         return result;
     }
 
 private:
     
+    /*
     void recursiveInorderTraversal(TreeNode* root, vector<int> &result)
     {
         if(root == NULL) 
@@ -45,5 +47,32 @@ private:
             recursiveInorderTraversal(root->right, result);
             
     }
+    */
+    void iterativelInorderTraversal(TreeNode* root, vector<int> &result)
+    {
+        
+        stack<TreeNode *> leftSubTree;
+        TreeNode *p = root;
+
+        while(p != NULL || !leftSubTree.empty())
+        {
+            while(p != NULL) //将左子树一直入栈
+            {
+                leftSubTree.push(p);
+                p = p->left;
+            }
+
+            if(!leftSubTree.empty())
+            {
+                p = leftSubTree.top();
+                result.push_back(p->val);
+                leftSubTree.pop();
+                p = p->right; //开始遍历右子树
+            }
+        }
+
+    }
+
+
 };
 
