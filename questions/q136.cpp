@@ -13,11 +13,12 @@ class Solution {
 public:
     int singleNumber(vector<int>& nums) {
 
-        int result = 0;
         int n = nums.size();
-        for (int i = 0; i<n; i++)
+        int result = nums[0];
+
+        for(int i=1;i<n;i++)
         {
-            result ^=nums[i];
+            result = result ^ nums[i];  /* Get the xor of all elements */
         }
         return result;
     }
