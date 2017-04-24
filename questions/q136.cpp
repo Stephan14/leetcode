@@ -14,7 +14,7 @@ public:
     int singleNumber(vector<int>& nums) {
        
         int result = 0;
-        for(auto oneNum : nums)
+        for(auto &oneNum : nums)
             result ^= oneNum;
         return result;
     }
