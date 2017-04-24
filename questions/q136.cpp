@@ -6,7 +6,6 @@
  ************************************************************************/
 
 #include<iostream>
-#include<unordered_map>
 
 using namespace std;
 
@@ -14,18 +13,9 @@ class Solution {
 public:
     int singleNumber(vector<int>& nums) {
        
-        unordered_map<int, int> numsMap;
-        for(auto num : nums)
-        {
-            if(numsMap.find(num) == numsMap.end()) 
-                numsMap[num] = 1;
-            else 
-                numsMap[num]++;
-        }
-
-        for(auto &oneTimeNum : numsMap)
-            if(oneTimeNum.second == 1)
-                return oneTimeNum.first;
-        return 0;
+        int result = 0;
+        for(auto oneNum : nums)
+            result ^= oneNum;
+        return result;
     }
 };
