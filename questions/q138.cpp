@@ -27,7 +27,7 @@ public:
         RandomListNode *headToReturn = NULL;
         RandomListNode *node = head;
         RandomListNode *preNode = NULL, *curNode = NULL;
-        map<RandomListNode*, RandomListNode*> nodeMap;
+        map<RandomListNode*, RandomListNode*> nodeMap;//使用map存储两个链表的对应关系，降低查找时的时间消耗
         
         while(node != NULL)
         {
