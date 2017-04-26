@@ -15,44 +15,36 @@ using namespace std;
 class Solution {
 public:
     string fractionToDecimal(int numerator, int denominator) {
-    
-        string strToReturn;
-        
-        if(numerator == 0)
-            return "0";
-        //判断正负号
-        if(numerator < 0 ^ denominator < 0) //使用异或运算符,条件都成立或者都失败，返回false 
-            strToReturn += "-";
+        //由于整型数INT的取值范围是-2147483648～2147483647，而对-2147483648取绝对值就会超出范围，所以我们需要先转为long long型再取绝对值
+        int s1 = numerator >= 0 ? 1 : -1;
+        int s2 = denominator >= 0 ? 1 : -1;
+        long long num = abs( (long long)numerator );
+        long long den = abs( (long long)denominator );
+        long long out = num / den;
+        long long rem = num % den;
+        unordered_map<long long, int> m;
 
-        numerator = abs(numerator);
-        denominator = abs(denominator);
+        string res = to_string(out);
 
-        strToReturn += to_string(numerator / denominator);//不用判断商是否为0
+        if (s1 * s2 == -1 && (out > 0 || rem > 0)) res = "-" + res;
+        if (rem == 0) 
+            return res;
+        res += ".";
 
-        if(numerator % denominator == 0)
-            return strToReturn;
-        else 
-            strToReturn += ".";
-        
-        unordered_map<int, int> remainderMap;
-        for(int remainder = numerator % denominator; remainder; remainder %= denominator)
-        {
-            if(remainderMap.count(remainder) > 0) 
-            {
-                strToReturn.insert(remainderMap[remainder], 1, '(');
-                strToReturn += ')';
-                break;
+        string s = "";
+        int pos = 0;
+        while (rem != 0) {
+            if (m.find(rem) != m.end()) {
+                s.insert(m[rem], "(");
+                s += ")";
+                return res + s;
             }
-
-            remainderMap[remainder] = strToReturn.size();
-
-            remainder *= 10;//向上一位借10
-
-            strToReturn += to_string(remainder / denominator);
+            m[rem] = pos;
+            s += to_string((rem * 10) / den);
+            rem = (rem * 10) % den;
+            ++pos;
         }
-
-        return strToReturn;
-        
+        return res + s;
     }
 
 };
