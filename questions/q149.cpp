@@ -37,7 +37,7 @@ public:
           slopesMap[INT_MAX]++;
         else {
           double slopes =
-              (points[i].y - points[j].y) / (points[i].x - points[j].x);
+              double(points[i].y - points[j].y) / double(points[i].x - points[j].x);
           slopesMap[slopes]++;
         }
       }
