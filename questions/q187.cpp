@@ -17,22 +17,28 @@ public:
     vector<string> findRepeatedDnaSequences(string s) {
 
         vector<string> result;
-        map<string, int> strTimesMap;
+        map<int, int> strTimesMap;
         if(s.size() < 10)
             return result;
 
-        for(int i = 0; i <= s.size() - 10; i++) 
-        {
-            string str = s.substr(i, 10);
-            if(strTimesMap.find(str) == strTimesMap.end())
-                strTimesMap[str] = 1;
-            else
-                strTimesMap[str]++;
-        }
+        int curStr = 0;
+        int i = 0;
+        int mask = 0x7ffffff;
+        while(i < 9)
+            curStr = (curStr << 3) | (s[i++] & 7);
 
-        for(auto it = strTimesMap.begin(); it != strTimesMap.end(); it++)
-            if(it->second > 1)
-                result.push_back(it->first);
+        while(i < s.size())
+        {
+            curStr = ((curStr & mask) << 3) | (s[i++] & 7);
+            if(strTimesMap.find(curStr) != strTimesMap.end())
+            {
+                if(strTimesMap[curStr] == 1)
+                    result.push_back(curStr);
+                strTimesMap[curStr]++;
+            }
+            else
+                strTimesMap[curStr] = 1;
+        }
 
         return result;
     }
