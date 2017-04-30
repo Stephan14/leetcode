@@ -8,7 +8,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
-#include<unordered_map>
+#include<map>
 
 
 using namespace std;
@@ -17,7 +17,7 @@ public:
     vector<string> findRepeatedDnaSequences(string s) {
 
         vector<string> result;
-        unordered_map<string, int> strTimesMap;
+        map<string, int> strTimesMap;
         if(s.size() < 10)
             return result;
 
