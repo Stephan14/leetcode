@@ -11,35 +11,26 @@
 using namespace std;
 
 class Solution {
-public:
-    bool isHappy(int n) {
-        
-        int tempN = 0;
-        int sourceN = n;
-        vector<int> sumRecord;
-        while(n != 0)
-        {
-            while(n != 0) 
-            {
-                int digit = n % 10;
-                tempN += digit * digit;
-                n = n / 10;
-            }
-
-            if(tempN == 1)
-                return true;
-            else
-            {
-                vector<int>::iterator it = find(sumRecord.begin(), sumRecord.end(), tempN);
-                if(it == sumRecord.end())
-                    sumRecord.push_back(tempN);
-                else
-                    return false;
-                n = tempN;
-                tempN = 0;
-            }
+    public:
+    int digitSquareSum(int n) {
+        int sum = 0, tmp;
+        while (n) {
+            tmp = n % 10;
+            sum += tmp * tmp;
+            n /= 10;
         }
+        return sum;
+    }
 
-        return false;
+    bool isHappy(int n) {
+        int slow, fast;
+        slow = fast = n;
+        do {
+            slow = digitSquareSum(slow);
+            fast = digitSquareSum(fast);
+            fast = digitSquareSum(fast);
+        } while(slow != fast);
+        if (slow == 1) return 1;
+        else return 0;
     }
 };
