@@ -12,3 +12,5 @@ leetcode刷题--C++
 138. Copy List with Random Pointer 单链表 map
 149. Max Points on a Line 斜率 map<pair<int, int>, int>
 166. Fraction to Recurring Decimal map long long 正负号
+187. Repeated DNA Sequences map 掩码 位操作
+202. Happy Number 快慢指针 思想类似于判断链表是否有环路时使用快慢指针
