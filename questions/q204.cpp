@@ -6,31 +6,33 @@
  ************************************************************************/
 
 #include<iostream>
+#include<vector>
+#include<cmath>
+
 using namespace std;
 
 class Solution {
     public:
-    bool isPrime(int n)    
-    {
-        if(n < 2)            
-            return false;
-
-        for (int i=2;i*i<=n;i++)   
-        {
-            if(n % i == 0)
-            return false;
-        }
-
-        return true;
-    }
 
     int countPrimes(int n) {
-        
-        int counter = 0;
+    
+        if(n <= 2)
+            return 0;
+        int counter = 1;
+        vector<bool> passed(n, false);
 
-        for(int i = 0; i < n; i++)
-            if(isPrime(i))   
+        int upper = sqrt(n);
+        for(int i = 3; i < n; i += 2)
+        {
+            if(passed[i]) 
+            {
                 counter++;
+                if(i > upper)
+                    continue;
+                for(int j = i * i; j < n; j += i)
+                    passed[j] = true;
+            }
+        }
 
         return counter;
     }
