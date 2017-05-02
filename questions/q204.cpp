@@ -24,7 +24,7 @@ class Solution {
         int upper = sqrt(n);
         for(int i = 3; i < n; i += 2)
         {
-            if(passed[i]) 
+            if(!passed[i]) 
             {
                 counter++;
                 if(i > upper)
