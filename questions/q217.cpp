@@ -6,22 +6,21 @@
  ************************************************************************/
 
 #include<iostream>
-#include<map>
+#include<set>
 #include<vector>
-
 
 using namespace std;
 
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
-        map<int, int> numTimesMap;
+        set<int> numTimesMap;
         for(auto &num : nums)
         {
             if(numTimesMap.find(num) != numTimesMap.end())
                 return true;
             else
-                numTimesMap[num] = 1;
+                numTimesMap.insert(num);
         }
         return false;
     }
