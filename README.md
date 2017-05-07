@@ -15,3 +15,7 @@ leetcode刷题--C++
 187. Repeated DNA Sequences map 掩码 位操作
 202. Happy Number 快慢指针 思想类似于判断链表是否有环路时使用快慢指针
 204. Count Primes vector 素数
+205. Isomorphic Strings 哈希表 下标
+217. Contains Duplicate set 查找
+219. Contains Duplicate II 用set存储固定数目的元素
+242. Valid Anagram 计数排序
