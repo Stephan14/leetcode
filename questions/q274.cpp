@@ -14,11 +14,22 @@ class Solution {
 public:
     int hIndex(vector<int>& citations) {
         
-        sort(citations.begin(), citations.end(), greater<int>());//从高到低排序
-        for(int i = 0; i < citations.size(); i++)
-            if(citations[i] <= i)
-                return i;
+        int len = citations.size();
+        vector<int> refTime(len+1, 0);//记录被引用次数为i的文章的数量
+        int total = 0;
+        //类似于计数排序的思想
+        for(int i = 0; i < len; i++)
+            if(citations[i] >= len)
+                refTime[len]++;
+            else
+                refTime[citations[i]]++;
+                
+        for(int i = len; i >= 0; i--)
+        {
+            total += refTime[i];
+            if(total >= i) return i;
+        } 
 
-        return citations.size();
+        return 0;
     }
 };
