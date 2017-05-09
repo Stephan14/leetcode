@@ -13,22 +13,23 @@
 using namespace std;
 
 class Solution {
-public:
+    public:
     bool wordPattern(string pattern, string str) {
-        
-        map<char, int> p2s;
-        map<string, int> s2p;
-        int i = 0, len = pattern.size();
-        istringstream in(str);
-
-        for(string word; in >> word; i++)//for 循环中执行完初始化之后，执行条件判断
-        {
-            if(i == len || p2s[pattern[i]] != s2p[word])
-                return false;
-            p2s[pattern[i]] = s2p[word] = i + 1;
-            cout << i << ":" << word << endl;
+        istringstream strcin(str);
+        string s;
+        vector<string> vs;
+        while(strcin >> s) vs.push_back(s);
+        if (pattern.size() != vs.size()) return false;
+        map<string, char> s2c;
+        map<char, string> c2s;
+        for (int i = 0; i < vs.size(); ++i) {
+            if (s2c[vs[i]] == 0 && c2s[pattern[i]] == "") { 
+                s2c[vs[i]] = pattern[i]; 
+                c2s[pattern[i]] = vs[i]; 
+                continue; 
+            }
+            if (s2c[vs[i]] != pattern[i]) return false;
         }
-
         return true;
     }
 };
