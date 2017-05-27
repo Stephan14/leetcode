@@ -19,3 +19,6 @@ leetcode刷题--C++
 217. Contains Duplicate set 查找
 219. Contains Duplicate II 用set存储固定数目的元素
 242. Valid Anagram 计数排序
+274. H-Index 计数排序
+290. Word Pattern 两个map进行匹配 一对一映射
+299. Bulls and Cows 根据两种数据对同一个哈希表进行操作
