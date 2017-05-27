@@ -13,25 +13,25 @@ using namespace std;
 class Solution {
 public:
     string getHint(string secret, string guess) {
-        int secretIndex = 0;
-        int guessIndex = 0;
+        int index = 0;
         int bull = 0, cow = 0;
+        int strExist[256] = {0};//记录某一字符出现的次数
 
-        while(secretIndex < secret.size() && guessIndex < guess.size())
+        while(index < secret.size())
         {
-            if(secret[secretIndex] == guess[guessIndex])
-            {
+            if(secret[index] == guess[index])
                 bull++;
-                cout << "same" << secret[secretIndex] << endl;
-            }
-            else if(secret.find(guess[guessIndex]) != string::npos)
+            else 
             {
-                cow++;
-                cout << "diff" << guess[guessIndex] << endl;
+                //对同一个哈希表进行操作
+                if(strExist[secret[index]]++ < 0)
+                    cow++;
+                if(strExist[guess[index]]-- > 0)
+                    cow++;
             }
-            secretIndex++, guessIndex++;
+            index++;
         }
-        
+
         return to_string(bull) + "A" + to_string(cow) + "B";
     }
 };
