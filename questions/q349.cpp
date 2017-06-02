@@ -45,5 +45,35 @@ public:
         }
 
         return result;
-    }    
+    //使用二分查找
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        set<int> s;
+        sort(nums1.begin(), nums1.end());
+        for(auto &it : nums2)
+        {
+            if(binarySearch(nums1, it))
+                s.insert(it);
+        }
+
+        return vector<int>(s.begin(), s.end());
+
+    }   
+
+    bool binarySearch(vector<int> &nums, int target)
+    {
+        int right = nums.size() - 1, left = 0;
+
+        while(left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if(nums[mid] < target)
+                left = mid + 1;
+            else if(nums[mid] > target)
+                right = mid - 1;
+            else 
+                return true;
+        }
+
+        return false;
+    }
 };
