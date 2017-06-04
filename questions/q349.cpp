@@ -14,7 +14,7 @@ using namespace std;
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        set<int> record(nums1.begin(), nums1.end()), result;
+        set<int> record(nums1.begin(), nums1.end()), result; //将数组转化成set便于查找
         for(auto &it : nums2)
         {
             if(record.count(it))
@@ -47,7 +47,7 @@ public:
         return result;
     //使用二分查找
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        set<int> s;
+        set<int> s;//利用set去重
         sort(nums1.begin(), nums1.end());
         for(auto &it : nums2)
         {
