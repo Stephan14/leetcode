@@ -10,14 +10,12 @@ using namespace std;
 class Solution {
 public:
     char findTheDifference(string s, string t) {
-        int strTimes[128] = {0};
-        for(auto &it : s)
-            strTimes[it]++;
-        for(auto &it : t)
-            if(--strTimes[it] < 0)
-                return it;
-        return ' ';
+        char r=0;
+        for(char c:s) r ^=c;
+        for(char c:t) r ^=c;
+        return r;
     }
+
 };
 
 int main()
