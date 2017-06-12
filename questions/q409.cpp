@@ -14,19 +14,17 @@ class Solution {
 public:
     int longestPalindrome(string s) {
        
-        map<char, int> charTimes;
+        int charTimes[256] = {0};
         int maxLen = 0;
         bool flag = false;
-        for(auto &it : s)
-            if(charTimes.find(it) != charTimes.end()) 
-                charTimes[it]++;
-            else
-                charTimes[it] = 1;
 
-        for(auto &it : charTimes)
-        {    
-            maxLen += it.second;
-            if(it.second % 2) //取奇数长度中最大的偶数长度
+        for(auto &it : s)
+            charTimes[it]++;
+
+        for(int i = 0; i < 256; i++)
+        {
+            maxLen += charTimes[i];
+            if(charTimes[i] != 0 && charTimes[i] % 2) //取奇数长度中最大的偶数长度
             {
                 maxLen -= 1;
                 flag = true;
