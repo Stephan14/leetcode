@@ -15,44 +15,35 @@ class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
         
-        int len = p.size();
-        string target = sortString(p);
+        //使用两个数组来比较字符是否出现的一样
+        //每个数组记录一段区域中字符出现的位置
         vector<int> result;
+        vector<int> sMap(128, 0), pMap(128, 0);
+        if(s.empty())
+            return {};//返回空数组
 
-        if(s.size() < len)
-            return result;
-
-        for(int i = 0; i < s.size() - len + 1; i++)
+        for(int i = 0; i < p.size(); i++)
         {
-            if(sortString(s.substr(i, len)) == target)
-                result.push_back(i);
+            ++sMap[s[i]];
+            ++pMap[p[i]];
         }
-
+        
+        if(sMap == pMap)
+            result.push_back(0);
+        for(int i = p.size(); i < s.size(); i++)
+        {
+            ++sMap[s[i]];
+            --sMap[s[i - p.size()]];
+            if(sMap == pMap)
+                result.push_back(i - p.size() + 1);
+        }
+        
         return result;
     }
 
-
-    string sortString(string str)
-    {
-        string result;
-        int charRecord[26] = {0};
-        for(auto &it : str)
-            charRecord[it-'a']++;
-
-        for(int i = 0; i < 26; i++)
-            for(int j = 0; j < charRecord[i]; j++)
-                result.push_back('a'+i);
-
-        return result; 
-    }
 };
 
 int main()
 {
-    string str1 = "abs";
-    string str2 = "sba";
-    Solution s;
-    cout << s.sortString(str1);
-    cout << s.sortString(str2);
 
 }
