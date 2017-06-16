@@ -18,51 +18,27 @@ struct ListNode {
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        
-        ListNode* top = NULL;
-        ListNode* rear = NULL;
-        while(l1 != NULL && l2 != NULL)
+        ListNode *top = new ListNode(-1);//使用哨位节点解决链表头问题
+        ListNode *current = top;
+
+        while(l1 && l2)
         {
             if(l1->val <= l2->val)
             {
-                if(top == NULL)
-                {
-                    top = l1;
-                    rear = l1;
-                }
-                else
-                {
-                    rear->next = l1;
-                    rear = l1;
-                }
+                current->next = l1;
                 l1 = l1->next;
             }
             else
             {
-                if(top == NULL)
-                {
-                    top = l2;
-                    rear = l2;
-                }
-                else
-                {
-                    rear->next = l2;
-                    rear = l2;
-                }
+                current->next = l2;
                 l2 = l2->next;
             }
+            current = current->next;
         }
 
-        if(l1 != NULL && rear != NULL) //使用指针之前判断指针是否为空
-            rear->next = l1;
-        else
-            top = l1;
-        if(l2 != NULL && rear != NULL)
-            rear->next = l2;
-        else
-            top = l2;
+        current->next = l2 ? l2 : l1;
 
-        return top;
+        return top->next;
     }
 };
 
