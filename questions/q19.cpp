@@ -20,28 +20,22 @@ struct ListNode {
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        
-        stack<ListNode*> s;
-        ListNode* top = head;
-        ListNode* cur = NULL;
+    
+        ListNode* pre = head;
+        ListNode* cur = head;
 
-        while(top != NULL)
+        for(int i = 0; i < n; i++)
+           pre = pre->next;
+
+        if(!pre) return head->next;//移除头结点
+
+        while(pre->next)//使用pre->next而不是pre,方便获取删除节点的前一个节点
         {
-            s.push(top);
-            top = top->next;
+            pre = pre->next;
+            cur = cur->next;
         }
 
-        while(!s.empty())
-        {
-            cur = s.top();
-            s.pop();
-            n--;
-            if(n == 0)
-                if(s.empty())
-                    return cur->next;
-                else
-                    s.top()->next = cur->next;
-        }
+        cur->next = cur->next->next;
 
         return head;
     }
