@@ -7,6 +7,7 @@
 
 #include<iostream>
 #include<vector>
+#include<priority_queue> 
 
 using namespace std;
 
@@ -20,42 +21,39 @@ struct ListNode {
 };
 class Solution {
 public:
-    //归并排序、分而治之的思想
+    //利用堆排序
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        int count = lists.size();
-        if(count == 0)
-            return NULL;
-        while(count > 1)
+        
+        priority_queue<ListNode*, vector<ListNode*>, cmp> q;
+        ListNode* first = NULL;
+        ListNode* current = NULL;
+
+        for(int i = 0; i < lists.size(); i++)
+            if(lists[i])//判断节点是否为空
+                q.push(lists[i]);
+
+        while(!q.empty())
         {
-            int k = (count + 1) / 2;//count无论为奇数还是偶数，其k的值都可以不变
-            for(int i = 0; i < count / 2; i++)
-                lists[i] = mergeTwoLists(lists[i], lists[k + i]);
-            count = k;
-        }
-
-        return lists[0];
-    }
-
-    ListNode* mergeTwoLists(ListNode* l1, ListNode*l2){
-        ListNode* first = new ListNode(-1);
-        ListNode* current = first;
-
-        while(l1 != NULL && l2 != NULL)
-        {
-            if(l1->val < l2->val)
-            {
-                current->next = l1;
-                l1 = l1->next;
-            }
+            ListNode * tmp = q.top();
+            q.pop();
+            if(tmp->next)
+                q.push(tmp->next);
+            if(first == NULL)
+                current = first = tmp;
             else
             {
-                current->next = l2;
-                l2 = l2->next;
+                current->next = tmp;
+                current = current->next;
             }
-            current = current->next;
         }
-        current->next = l1 ? l1 : l2;
 
-        return first->next;
+        return first;
     }
+
+    struct cmp{
+        bool operator()(ListNode* a, ListNode* b)
+        {
+            return a->val > b->val;
+        }
+    };
 };
