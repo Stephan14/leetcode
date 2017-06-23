@@ -19,23 +19,17 @@ class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
     
-        ListNode* top = new ListNode(-1);
-        ListNode* result = top;
-        top->next = head;
-        ListNode* cur = top;
-
-        while(cur != NULL && cur->next != NULL)
+        ListNode** pp = &head, *a , *b;
+        //从后往前进行拼接链表
+        while((a = *pp) && (b = a->next))
         {
-            ListNode* tmp = cur->next->next;
+            a->next = b->next;
+            b->next = a;
 
-            top->next = cur->next;
-            cur->next->next = cur;
-            cur->next = tmp;
-
-            top = cur;
-            cur = cur->next;
+            *pp = b;
+            pp = &(a->next); 
         }
 
-        return result->next;
+        return head;
     }
 };
