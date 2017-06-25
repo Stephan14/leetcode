@@ -19,23 +19,38 @@ class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
     
+        if(head == NULL || k == 0)
+            return head;
+
+        ListNode* current = head;
+        int num = 0;
+        while(current != NULL)
+        {
+            num++;
+            current = current->next;
+        }
+        k = k % num;
+
         ListNode* first = head;
         for(int i = 0; i < k; i++)
-            first = first->next;
+            if(first)
+                first = first->next;
 
         if(first == NULL)
             return head;
 
         ListNode* second = head;
-        while(!first->next)
+        while(first->next)
         {
             second = second->next;
             first = first->next;
         }
 
-        second = second->next;
+        //从后往前设置链表
         first->next = head;
+        first = second->next;
+        second->next = NULL;
 
-        return second;
+        return first;
     }
 };
