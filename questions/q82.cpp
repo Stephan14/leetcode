@@ -19,31 +19,17 @@ struct ListNode {
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        ListNode* top = new ListNode(-1);
-        top->next = head;
-     
-        ListNode* quick = NULL;
-        ListNode* slow = NULL;
-        ListNode* pre = top;
+        if (!head || !head->next) return head;
 
-        while(pre != NULL)
-        {
-            slow = pre->next;
-
-            if(slow)
-                quick = slow->next;
-            else
-                return top->next;
-
-            while(quick && quick->val == slow->val)
-                if(quick)
-                    quick = quick->next;
-            if(slow->next == quick)
-                pre = slow;
-            else
-                pre->next = quick; 
+        ListNode *start = new ListNode(0);
+        start->next = head;
+        ListNode *pre = start;
+        while (pre->next) {
+            ListNode *cur = pre->next;
+            while (cur->next && cur->next->val == cur->val) cur = cur->next;
+            if (cur != pre->next) pre->next = cur->next;
+            else pre = pre->next;
         }
-
-        return top->next;
+        return start->next;
     }
 };
