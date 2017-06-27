@@ -19,27 +19,22 @@ class Solution {
 public:
     ListNode* partition(ListNode* head, int x) {
     
-        ListNode* first = new ListNode(-1);
-        first->next = head;
+        ListNode node1(0), node2(0);
+        ListNode* p1 = &node1, *p2 = &node2;
 
-        ListNode* pre = first;
-        ListNode* cur = head;
-        ListNode* low = first;
-
-        while(cur)
+        while(head)
         {
-            if(cur->val < x)
-            {
-                pre->next = cur->next;
-                //从后往前连接链表
-                cur->next = low->next;
-                low->next = cur;
-                low = low->next;
-            }
-            pre = cur;
-            cur = cur->next;
+            if(head->val < x)
+                p1 = p1->next = head;
+            else
+                p2 = p2->next = head;
+
+            head = head->next;
         }
 
-        return first->next;
+        p2->next = NULL;
+        p1->next = node2.next;
+
+        return node1.next;
     }
 };
