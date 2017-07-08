@@ -20,10 +20,12 @@ class Solution {
 public:
     bool hasCycle(ListNode *head) {
     
+        if(head == NULL || head->next == NULL) return false;
+
         ListNode* quick = head;
         ListNode* slow = head;
 
-        while(quick && quick->next != NULL && quick->next->next != NULL)
+        while(quick->next && quick->next->next)
         {
             quick = quick->next->next;
             slow = slow->next;
