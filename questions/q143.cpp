@@ -20,26 +20,31 @@ struct ListNode {
 class Solution {
 public:
     void reorderList(ListNode* head) {
-        
-        ListNode* fast = head;
-        ListNode* slow = head;
 
-        if(head == NULL || head->next == NULL || head->next->next == NULL) 
-            return head;
-
-        while(fast->next && fast->next->next)
-        {
-            fast = fast->next->next;
+        if (!head || !head->next || !head->next->next) return;
+        ListNode *fast = head;
+        ListNode *slow = head;
+        while (fast->next && fast->next->next) {
             slow = slow->next;
+            fast = fast->next->next;
         }
-
-        //举例测试该方法是否行得通
-        ListNode* last = slow->next;
+        ListNode *mid = slow->next;
         slow->next = NULL;
-
-        ListNode* bank = reserveList(last);
-    
-
+        ListNode *last = mid;
+        ListNode *pre = NULL;
+        while (last) {
+            ListNode *next = last->next;
+            last->next = pre;
+            pre = last;
+            last = next;
+        }
+        while (head && pre) {
+            ListNode *next = head->next;
+            head->next = pre;
+            pre = pre->next;
+            head->next->next = next;
+            head = next;
+        }
 
     }
 
