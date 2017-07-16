@@ -13,16 +13,19 @@ class Solution {
     public:
     int climbStairs(int n) {
 
-        int* p = new int[n+1];
-        p[1] = 1;
-        p[2] = 2;
+        if(n == 1)
+            return 1;
 
+        int first = 1;
+        int second = 2;
         for(int i = 3; i <= n; i++)
         {
-            p[i] = p[i-1] + p[i-2];
+            int third = first + second;
+            first = second;
+            second = third;
         }
-        
-        return p[n];
+
+        return second;
     }
 
 };
